@@ -16,24 +16,32 @@
  */
 package org.superbiz.moviefun.albums;
 
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.sql.DataSource;
 import java.util.List;
+import org.hibernate.dialect.MySQL5Dialect;
 
 @Repository
 public class AlbumsBean {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Transactional
+    @Transactional(transactionManager = "platformTransactionManagerAlbums")
     public void addAlbum(Album album) {
         entityManager.persist(album);
     }
+
+
+    @PersistenceContext(unitName="albums-db")
+    private EntityManager entityManager;
 
     public List<Album> getAlbums() {
         CriteriaQuery<Album> cq = entityManager.getCriteriaBuilder().createQuery(Album.class);

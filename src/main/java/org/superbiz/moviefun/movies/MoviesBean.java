@@ -16,6 +16,9 @@
  */
 package org.superbiz.moviefun.movies;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,29 +32,30 @@ import java.util.List;
 @Repository
 public class MoviesBean {
 
-    @PersistenceContext
+
+    @PersistenceContext(unitName="movies-db")
     private EntityManager entityManager;
 
     public Movie find(Long id) {
         return entityManager.find(Movie.class, id);
     }
 
-    @Transactional
+    @Transactional(transactionManager = "platformTransactionManagerMovies")
     public void addMovie(Movie movie) {
         entityManager.persist(movie);
     }
 
-    @Transactional
+    @Transactional(transactionManager = "platformTransactionManagerMovies")
     public void editMovie(Movie movie) {
         entityManager.merge(movie);
     }
 
-    @Transactional
+    @Transactional(transactionManager = "platformTransactionManagerMovies")
     public void deleteMovie(Movie movie) {
         entityManager.remove(movie);
     }
 
-    @Transactional
+    @Transactional(transactionManager = "platformTransactionManagerMovies")
     public void deleteMovieId(long id) {
         Movie movie = entityManager.find(Movie.class, id);
         deleteMovie(movie);
