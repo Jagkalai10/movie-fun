@@ -11,17 +11,19 @@ import java.util.Scanner;
 
 public class CsvUtils {
 
+
     public static String readFile(String path) {
-        try {
 
-            Class cls = Class.forName("CsvUtils");
+            //Class cls = Class.forName("CsvUtils");
 
-            // returns the ClassLoader object associated with this Class
-            ClassLoader cLoader = cls.getClassLoader();
+            System.out.println("Path = " + path);
 
-            InputStream resourceAsStream = cLoader.getResourceAsStream(path);
+//            // returns the ClassLoader object associated with this Class
+//            ClassLoader cLoader = CsvUtils.class.getClass().getClassLoader();
+//
+//            InputStream resourceAsStream = cLoader.getResourceAsStream(path);
 
-            Scanner scanner = new Scanner(resourceAsStream()).useDelimiter("\\A");
+            Scanner scanner = new Scanner(CsvUtils.class.getClassLoader().getResourceAsStream(path)).useDelimiter("\\A");
 
             if (scanner.hasNext()) {
                 return scanner.next();
@@ -29,14 +31,9 @@ public class CsvUtils {
                 return "";
             }
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
-    public static <T> List<T> readFromCsv(ObjectReader objectReader, String path) {
+    public  static <T> List<T> readFromCsv(ObjectReader objectReader, String path) {
         try {
             List<T> results = new ArrayList<>();
 
@@ -52,20 +49,4 @@ public class CsvUtils {
         }
     }
 
-    public ClassLoader getClassLoader() throws ClassNotFoundException {
-        Class cls = Class.forName("CsvUtils");
-
-        // returns the ClassLoader object associated with this Class
-        ClassLoader cLoader = cls.getClassLoader();
-
-        // input stream
-        InputStream i = cLoader.getResourceAsStream(rsc);
-        BufferedReader r = new BufferedReader(new InputStreamReader(i));
-
-        // finds resource with the given name
-        URL url = cLoader.getResource("file.txt");
-
-        // finds resource with the given name
-        url = cLoader.getResource("newfolder/a.txt");
-    }
 }
