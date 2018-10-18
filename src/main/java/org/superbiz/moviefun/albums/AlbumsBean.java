@@ -32,10 +32,12 @@ public class AlbumsBean {
 
     @Transactional
     public void addAlbum(Album album) {
+
         entityManager.persist(album);
     }
 
     public Album find(long id) {
+
         return entityManager.find(Album.class, id);
     }
 
